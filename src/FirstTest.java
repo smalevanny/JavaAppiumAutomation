@@ -116,6 +116,16 @@ public class FirstTest {
                 article_title);
     }
 
+    @Test
+    public void checkSearchFieldText(){
+
+        assertElementHasText(
+                By.xpath("//*[contains(@text, 'Search Wikipedia')]"),
+                "Search Wikipedia",
+                "Search Field text is not 'Search Wikipedia'"
+        );
+    }
+
     private WebElement waitForElementPresent(By by, String error_message, long timeout_in_seconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeout_in_seconds);
         wait.withMessage(error_message + "\n");
@@ -148,5 +158,14 @@ public class FirstTest {
         WebElement element = waitForElementPresent(by, error_message, timeout_in_seconds);
         element.clear();
         return element;
+    }
+
+    private void assertElementHasText(By by, String text, String error_message){
+        WebElement element = waitForElementPresent(by, error_message);
+        String element_text = element.getAttribute("text");
+        Assert.assertEquals(
+                error_message,
+                text,
+                element_text);
     }
 }
