@@ -25,7 +25,7 @@ public class MyListsTests extends CoreTestCase {
         navigationUI.clickMyLists();
 
         MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.opeFolderByName(folder_name);
+        myListsPageObject.openFolderByName(folder_name);
         myListsPageObject.swipeArticleToDelete(article_title);
     }
 
@@ -69,7 +69,7 @@ public class MyListsTests extends CoreTestCase {
         NavigationUI navigationUI = new NavigationUI(driver);
         navigationUI.clickMyLists();
         MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.opeFolderByName(folder_name);
+        myListsPageObject.openFolderByName(folder_name);
 
         myListsPageObject.swipeArticleToDelete(title_for_the_second_article);
 
