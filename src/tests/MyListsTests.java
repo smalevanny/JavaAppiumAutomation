@@ -1,31 +1,43 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
+import lib.factories.ArticlePageObjectFactory;
+import lib.factories.MyListsObjectFactory;
+import lib.factories.NavigationUIFactory;
+import lib.factories.SearchPageObjectFactory;
 import lib.ui.*;
 import org.junit.Test;
 
 public class MyListsTests extends CoreTestCase {
+
+    public static final String FOLDER_NAME = "Learning programming";
+
     @Test
     public void testSaveFirstArticleToMyListAndDeleteIt(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         String article_title = articlePageObject.getArticleTitle();
 
-        String folder_name = "Learning programming";
-
-        articlePageObject.addArticleToMyList(folder_name);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyList(FOLDER_NAME);
+        } else {
+            articlePageObject.addArticleToMySaved();
+        }
         articlePageObject.closeArticle();
 
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.openFolderByName(folder_name);
+        MyListsPageObject myListsPageObject = MyListsObjectFactory.get(driver);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(FOLDER_NAME);
+        }
         myListsPageObject.swipeArticleToDelete(article_title);
     }
 
@@ -35,21 +47,24 @@ public class MyListsTests extends CoreTestCase {
         String search_input_for_second_article  = "Python";
         String search_text_for_first_article    = "Object-oriented programming language";
         String search_text_for_second_article   = "General-purpose programming language";
-        String folder_name = "Learning programming";
 
         //search for the first article
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine(search_input_for_first_article);
         searchPageObject.clickByArticleWithSubstring(search_text_for_first_article);
 
         //get the first article's title
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         String title_for_the_first_article = articlePageObject.getArticleTitle();
 
         //add first article to new reading list
-        articlePageObject.addArticleToMyList(folder_name);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyList(FOLDER_NAME);
+        } else {
+            articlePageObject.addArticleToMySaved();
+        }
         articlePageObject.closeArticle();
 
         //search for the second article
@@ -62,18 +77,25 @@ public class MyListsTests extends CoreTestCase {
         String title_for_the_second_article = articlePageObject.getArticleTitle();
 
         //add second article to existing reading list
-        articlePageObject.addArticleToMyList(folder_name, false);
+        if (Platform.getInstance().isAndroid()) {
+            articlePageObject.addArticleToMyList(FOLDER_NAME, false);
+        } else {
+            articlePageObject.addArticleToMySaved();
+        }
         articlePageObject.closeArticle();
 
         //open existing reading list and delete second article
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickMyLists();
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.openFolderByName(folder_name);
+        MyListsPageObject myListsPageObject = MyListsObjectFactory.get(driver);
+        if (Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(FOLDER_NAME);
+        }
 
         myListsPageObject.swipeArticleToDelete(title_for_the_second_article);
 
         //check that first article is still present
+        //TODO: finnish when issue with Appium standalone Inspector is solved on My Mac
         myListsPageObject.clickArticleByTitle(title_for_the_first_article);
         articlePageObject.waitForTitleElement();
         String article_title = articlePageObject.getArticleTitle();

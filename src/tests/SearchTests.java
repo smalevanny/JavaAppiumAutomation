@@ -1,6 +1,7 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.factories.SearchPageObjectFactory;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearch(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         searchPageObject.waitForSearchResult("Object-oriented programming language");
@@ -16,7 +17,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCancelSearch(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.waitForCancelButtonToAppear();
         searchPageObject.clickCancelSearch();
@@ -25,7 +26,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testAmountOfElementsInSearchResult(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_input = "Linkin Park Discography";
         searchPageObject.typeSearchLine(search_input);
@@ -34,7 +35,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testAmountOfElementsInEmptySearchResult(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         String search_input = "hcgvsacghvashcvsdcgh";
         searchPageObject.typeSearchLine(search_input);
@@ -44,7 +45,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCheckSearchAndCancelSearch(){
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchLine("Java");
         assertTrue("we found too few results", searchPageObject.getAmountOfFoundArticles() > 0);
